@@ -13,7 +13,6 @@
 #include "GestureDelegate.h"
 #include "VRLayer.h"
 #include "vrb/LoaderThread.h"
-#include "vrb/Matrix.h"
 
 #include <memory>
 
@@ -62,11 +61,6 @@ public:
   enum class ImmersiveXRSessionType {
       VR,
       AR
-  };
-  struct TrackedKeyboardInfo {
-      bool isActive;
-      vrb::Matrix transform;
-      std::vector<uint8_t> modelBuffer;
   };
   virtual device::DeviceType GetDeviceType() { return device::UnknownType; }
   virtual void SetRenderMode(const device::RenderMode aMode) = 0;
@@ -136,7 +130,6 @@ public:
   };
   virtual void SetPointerMode(const PointerMode) {};
   virtual void SetImmersiveBlendMode(device::BlendMode) {};
-  virtual bool PopulateTrackedKeyboardInfo(TrackedKeyboardInfo& keyboardInfo) { return false; };
 
 protected:
   DeviceDelegate() {}
