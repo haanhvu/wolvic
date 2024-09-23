@@ -489,7 +489,7 @@ public class SettingsStore {
 
     public int getWindowHeight() {
         return mPrefs.getInt(
-                mContext.getString(R.string.settings_key_window_width), WINDOW_HEIGHT_DEFAULT);
+                mContext.getString(R.string.settings_key_window_height), WINDOW_HEIGHT_DEFAULT);
     }
 
     public void setWindowHeight(int height) {
