@@ -74,11 +74,8 @@ class DisplayOptionsView extends SettingsView {
         setMSAAMode(mBinding.msaaRadio.getIdForValue(msaaLevel), false);
 
         int windowsWidth = SettingsStore.getInstance(getContext()).getWindowWidth();
-        Log.e("PR1545", "Current window's width: " + windowsWidth);
         int windowsHeight = SettingsStore.getInstance(getContext()).getWindowHeight();
-        Log.e("PR1545", "Current window's height: " + windowsHeight);
         String windowsSize = windowsWidth + "x" + windowsHeight;
-        Log.e("PR1545", "Current window's size: " + windowsSize);
         mBinding.windowsSize.setOnCheckedChangeListener(mWindowsSizeChangeListener);
         setWindowsSize(mBinding.windowsSize.getIdForValue(windowsSize), false);
 
@@ -256,7 +253,6 @@ class DisplayOptionsView extends SettingsView {
             setMSAAMode(mBinding.msaaRadio.getIdForValue(SettingsStore.MSAA_DEFAULT_LEVEL), true);
         }
         String defaultWindowsSize = SettingsStore.WINDOW_WIDTH_DEFAULT + "x" + SettingsStore.WINDOW_HEIGHT_DEFAULT;
-        Log.e("PR1545", "Default window's size: " + defaultWindowsSize);
         if (!mBinding.windowsSize.getValueForId(mBinding.windowsSize.getCheckedRadioButtonId()).equals(defaultWindowsSize)) {
             setWindowsSize(mBinding.windowsSize.getIdForValue(defaultWindowsSize), true);
         }
@@ -420,10 +416,7 @@ class DisplayOptionsView extends SettingsView {
         mBinding.windowsSize.setOnCheckedChangeListener(mWindowsSizeChangeListener);
 
         String windowsSize = (String)mBinding.windowsSize.getValueForId(checkedId);
-        Log.e("PR1545", "Changed window's size: " + windowsSize);
         String[] widthAndHeight = windowsSize.split("x");
-        Log.e("PR1545", "Changed window's width: " + widthAndHeight[0]);
-        Log.e("PR1545", "Changed window's height: " + widthAndHeight[1]);
         SettingsStore.getInstance(getContext()).setWindowWidth(Integer.parseInt(widthAndHeight[0]));
         SettingsStore.getInstance(getContext()).setWindowHeight(Integer.parseInt(widthAndHeight[1]));
     }
