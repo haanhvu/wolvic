@@ -1484,7 +1484,7 @@ public void selectTab(@NonNull Session aTab) {
         targetWindow.setSession(session, WindowWidget.DEACTIVATE_CURRENT_SESSION);
         if (aUri == null || aUri.isEmpty()) {
             if (session.getHomeUri() == "") {
-                targetWindow.showPanel(Windows.BOOKMARKS);
+                targetWindow.showNewTab();
             } else {
                 session.loadHomePage();
             }
