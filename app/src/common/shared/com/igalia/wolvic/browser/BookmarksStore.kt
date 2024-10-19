@@ -147,7 +147,7 @@ class BookmarksStore constructor(val context: Context) {
 
     @OptIn(ExperimentalUnsignedTypes::class)
     fun addBookmark(aURL: String, aTitle: String) = GlobalScope.future {
-        storage.addItem(BookmarkRoot.Mobile.id, aURL, aTitle, null)
+        storage.addItem(BookmarkRoot.Mobile.id, aURL, aTitle, null);
         notifyAddedListeners()
     }
 

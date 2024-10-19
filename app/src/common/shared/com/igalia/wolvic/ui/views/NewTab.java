@@ -114,7 +114,7 @@ public class NewTab extends FrameLayout {
     }
 
     private void showBookmarks(List<BookmarkNode> aBookmarks) {
-        mBookmarkAdapter.setBookmarkList(aBookmarks);
+        mBookmarkAdapter.setBookmarkListForNewTab(aBookmarks);
         mBinding.executePendingBindings();
     }
 
