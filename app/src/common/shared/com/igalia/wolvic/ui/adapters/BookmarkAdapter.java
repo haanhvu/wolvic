@@ -2,6 +2,7 @@ package com.igalia.wolvic.ui.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.igalia.wolvic.ui.widgets.WidgetPlacement;
 import com.igalia.wolvic.utils.AnimationHelper;
 import com.igalia.wolvic.utils.SystemUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -88,6 +90,43 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             List<String> openFoldersGuid = Bookmark.getOpenFoldersGuid(mDisplayList);
             newDisplayList = Bookmark.getDisplayListTree(mBookmarksList, openFoldersGuid);
             notifyDiff(newDisplayList);
+        }
+    }
+
+    public void setBookmarkListForNewTab(final List<BookmarkNode> bookmarkList) {
+        mBookmarksList = bookmarkList;
+        //notifyItemRangeInserted(0, mBookmarksList.size());
+
+        List<Bookmark> newDisplayList;
+        if (mDisplayList == null || mDisplayList.isEmpty()) {
+            Log.e(LOGTAG, "Set bookmarks: First case");
+
+            List<Bookmark> mDisplayList = new ArrayList<>();
+            newDisplayList = Bookmark.getDisplayListTree(mBookmarksList, Collections.singletonList(BookmarkRoot.Mobile.getId()));
+
+            for (Bookmark node : newDisplayList) {
+                if (node.getType() == Bookmark.Type.ITEM) {
+                    mDisplayList.add(node);
+                }
+            }
+
+            Log.e(LOGTAG, "Bookmarks size in first case: " + mDisplayList.size());
+            notifyItemRangeInserted(0, mDisplayList.size());
+        } else {
+            Log.e(LOGTAG, "Set bookmarks: Second case");
+
+            List<String> openFoldersGuid = Bookmark.getOpenFoldersGuid(mDisplayList);
+            newDisplayList = Bookmark.getDisplayListTree(mBookmarksList, openFoldersGuid);
+
+            List<Bookmark> newDisplayList1 = new ArrayList<>();
+            for (Bookmark node : newDisplayList) {
+                if (node.getType() == Bookmark.Type.ITEM) {
+                    newDisplayList1.add(node);
+                }
+            }
+
+            Log.e(LOGTAG, "Bookmarks size in second case: " + newDisplayList1.size());
+            notifyDiff(newDisplayList1);
         }
     }
 
