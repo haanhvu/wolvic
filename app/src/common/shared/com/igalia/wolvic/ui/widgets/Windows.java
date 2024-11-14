@@ -733,9 +733,6 @@ public class Windows implements TrayListener, TopBarWidget.Delegate, TitleBarWid
         }
 
         for (WindowWidget window: getCurrentWindows()) {
-            if (window.getWindowWidth() >= 900 && window.getWindowHeight() >= 600) {
-                maxScale = 1.0f;
-            }
             window.setMaxWindowScale(maxScale);
         }
     }

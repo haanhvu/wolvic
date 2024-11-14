@@ -1574,9 +1574,17 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         return new Pair<>(minWidth, minHeight);
     }
 
+    public Pair<Float, Float> getDefaultWorldSize() {
+        SettingsStore settings = SettingsStore.getInstance(getContext());
+        float defaultWidth = settings.getWindowWidth() * WidgetPlacement.worldToDpRatio(getContext());
+        float defaultHeight = settings.getWindowHeight() * WidgetPlacement.worldToDpRatio(getContext());
+        return new Pair<>(defaultWidth, defaultHeight);
+    }
+
     public @NonNull Pair<Float, Float> getSizeForScale(float aScale, float aAspect) {
         Pair<Float, Float> minWorldSize = getMinWorldSize();
         Pair<Float, Float> maxWorldSize = getMaxWorldSize();
+        Pair<Float, Float> defaultWorldSize = getDefaultWorldSize();
         Pair<Float,Float> mainAxisMinMax, crossAxisMinMax;
         float mainAxisDefault, mainAxisTarget;
         float mainCrossAspect;
@@ -1584,13 +1592,13 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         boolean isHorizontal = aAspect >= 1.0;
         if (isHorizontal) {
             // horizontal orientation
-            mainAxisDefault = WidgetPlacement.floatDimension(getContext(), R.dimen.window_world_width);
+            mainAxisDefault = defaultWorldSize.first;
             mainAxisMinMax = Pair.create(minWorldSize.first, maxWorldSize.first);
             crossAxisMinMax = Pair.create(minWorldSize.second, maxWorldSize.second);
             mainCrossAspect = aAspect;
         } else {
             // vertical orientation
-            mainAxisDefault = WidgetPlacement.floatDimension(getContext(), R.dimen.window_world_width) * aAspect;
+            mainAxisDefault = defaultWorldSize.second;
             mainAxisMinMax = Pair.create(minWorldSize.second, maxWorldSize.second);
             crossAxisMinMax = Pair.create(minWorldSize.first, maxWorldSize.first);
             mainCrossAspect = 1 / aAspect;
@@ -1625,7 +1633,7 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
     }
 
     private int getWindowWidth(float aWorldWidth) {
-        return (int) Math.floor(SettingsStore.getInstance(getContext()).getWindowWidth() * aWorldWidth / WidgetPlacement.floatDimension(getContext(), R.dimen.window_world_width));
+        return (int) Math.floor(SettingsStore.WINDOW_WIDTH_DEFAULT * aWorldWidth / WidgetPlacement.floatDimension(getContext(), R.dimen.window_world_width));
     }
 
     private NavigationBarWidget.NavigationListener mNavigationBarListener = new NavigationBarWidget.NavigationListener() {

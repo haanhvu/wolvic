@@ -214,13 +214,12 @@ public class WidgetPlacement {
 
     public static float worldToWindowRatio(Context aContext){
         SettingsStore settingStore = SettingsStore.getInstance(aContext);
-        return (WidgetPlacement.floatDimension(aContext, R.dimen.window_world_width) / settingStore.getWindowWidth() /
+        return (WidgetPlacement.floatDimension(aContext, R.dimen.window_world_width) / SettingsStore.WINDOW_WIDTH_DEFAULT  /
                 (settingStore.getDisplayDpi() / 100.0f) / settingStore.getDisplayDensity()) / WORLD_DPI_RATIO;
     }
 
     public static float worldToDpRatio(Context aContext){
-        SettingsStore settingStore = SettingsStore.getInstance(aContext);
-        return (WidgetPlacement.floatDimension(aContext, R.dimen.window_world_width) / settingStore.getWindowWidth());
+        return (WidgetPlacement.floatDimension(aContext, R.dimen.window_world_width) / SettingsStore.WINDOW_WIDTH_DEFAULT);
     }
 
     public static float viewToWidgetRatio(@NonNull Context context, @NonNull UIWidget widget) {

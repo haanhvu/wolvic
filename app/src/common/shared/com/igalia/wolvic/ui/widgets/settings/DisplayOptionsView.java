@@ -81,7 +81,10 @@ class DisplayOptionsView extends SettingsView {
         }
         mBinding.windowsSize.setOptions(windowSizePresets.toArray(new String[0]));
         mBinding.windowsSize.setOnCheckedChangeListener(mWindowsSizeChangeListener);
-        setWindowsSize(SettingsStore.windowSizeId, false);
+        int windowWidth = SettingsStore.getInstance(getContext()).getWindowWidth();
+        int windowHeight = SettingsStore.getInstance(getContext()).getWindowHeight();
+        SettingsStore.WindowSizePreset windowSizePreset = SettingsStore.WindowSizePreset.fromValues(windowWidth, windowHeight);
+        setWindowsSizePreset(windowSizePreset.ordinal(), false);
 
         mBinding.autoplaySwitch.setOnCheckedChangeListener(mAutoplayListener);
         setAutoplay(SettingsStore.getInstance(getContext()).isAutoplayEnabled(), false);
@@ -177,7 +180,7 @@ class DisplayOptionsView extends SettingsView {
     };
 
     private RadioGroupSetting.OnCheckedChangeListener mWindowsSizeChangeListener = (radioGroup, checkedId, doApply) -> {
-        setWindowsSize(checkedId, true);
+        setWindowsSizePreset(checkedId, true);
     };
 
     private SwitchSetting.OnCheckedChangeListener mAutoplayListener = (compoundButton, enabled, apply) -> {
@@ -264,8 +267,8 @@ class DisplayOptionsView extends SettingsView {
             restart = true;
         }
 
-        if (mBinding.windowsSize.getCheckedRadioButtonId() != 0) {
-            setWindowsSize(0, true);
+        if (mBinding.windowsSize.getCheckedRadioButtonId() != SettingsStore.WINDOW_SIZE_PRESET_DEFAULT.ordinal()) {
+            setWindowsSizePreset(SettingsStore.WINDOW_SIZE_PRESET_DEFAULT.ordinal(), true);
         }
 
         float prevDensity = SettingsStore.getInstance(getContext()).getDisplayDensity();
@@ -429,13 +432,12 @@ class DisplayOptionsView extends SettingsView {
         }
     }
 
-    private void setWindowsSize(int checkedId, boolean doApply) {
+    private void setWindowsSizePreset(int checkedId, boolean doApply) {
         mBinding.windowsSize.setOnCheckedChangeListener(null);
         mBinding.windowsSize.setChecked(checkedId, doApply);
         mBinding.windowsSize.setOnCheckedChangeListener(mWindowsSizeChangeListener);
 
-        SettingsStore.getInstance(getContext()).setWindowSize(checkedId);
-        SettingsStore.windowSizeId = checkedId;
+        SettingsStore.getInstance(getContext()).setWindowSizePreset(checkedId);
     }
 
     private boolean setDisplayDensity(float newDensity) {
