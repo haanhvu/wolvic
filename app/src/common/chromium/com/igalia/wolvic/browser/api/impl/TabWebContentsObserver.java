@@ -1,10 +1,14 @@
 package com.igalia.wolvic.browser.api.impl;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.igalia.wolvic.browser.api.WResult;
 import com.igalia.wolvic.browser.api.WSession;
 import com.igalia.wolvic.browser.api.WWebRequestError;
+import com.igalia.wolvic.utils.InternalPages;
 
 import org.chromium.content_public.browser.LifecycleState;
 import org.chromium.content_public.browser.NavigationHandle;
@@ -81,11 +85,14 @@ public class TabWebContentsObserver extends WebContentsObserver {
      */
     @Override
     public void didFinishNavigationInPrimaryMainFrame(NavigationHandle navigationHandle) {
+        Log.e("ChromiumErrorPage", "didFinishNavigationInPrimaryMainFrame is called");
+
         WSession.NavigationDelegate navigationDelegate = mSession.getNavigationDelegate();
         if (navigationDelegate == null)
             return;
 
         if (navigationHandle.isErrorPage()) {
+            Log.e("ChromiumErrorPage", "isErrorPage() is true");
             didFailLoad(true, navigationHandle.errorCode(), navigationHandle.getUrl(), 0);
             return;
         }
@@ -116,7 +123,9 @@ public class TabWebContentsObserver extends WebContentsObserver {
 
         WSession.NavigationDelegate navigationDelegate = mSession.getNavigationDelegate();
         if (navigationDelegate != null) {
-            navigationDelegate.onLoadError(mSession, failingUrl.getSpec(), new WWebRequestError() {
+            Log.e("ChromiumErrorPage", "navigationDelegate != null => onLoadError() is called");
+
+            WResult<String> errorUriResult = navigationDelegate.onLoadError(mSession, failingUrl.getSpec(), new WWebRequestError() {
                 @Override
                 public int code() {
                     return errorCode;
@@ -135,6 +144,11 @@ public class TabWebContentsObserver extends WebContentsObserver {
                     return null;
                 }
             });
+
+            Log.e("ChromiumErrorPage", "errorUriResult: " + errorUriResult.toString());
+            //mSession.loadUri(errorUriResult.toString());
+            Log.e("ChromiumErrorPage", "InternalPages.htmlBytes: " + InternalPages.htmlBytes);
+            mSession.loadData(InternalPages.htmlBytes, "text/html");
         }
     }
 

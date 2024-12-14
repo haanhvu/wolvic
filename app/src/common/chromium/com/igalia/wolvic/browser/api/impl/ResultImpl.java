@@ -2,6 +2,7 @@ package com.igalia.wolvic.browser.api.impl;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class ResultImpl<T> implements WResult<T> {
 
     @Override
     public synchronized void complete(@Nullable T value) {
+        Log.e("ChromiumErrorPage", "Chromium complete() is called");
         mValue = value;
         mComplete = true;
 
@@ -177,23 +179,28 @@ public class ResultImpl<T> implements WResult<T> {
 
     private void dispatch() {
         if (!mComplete) {
+            Log.e("Chromium dispatch()", "IllegalStateException");
             throw new IllegalStateException("Cannot dispatch unless result is complete");
         }
 
         if (mListeners.isEmpty()) {
             if (mIsUncaughtError) {
+                Log.e("Chromium dispatch()", "UncaughtException");
                 // We have no listeners to forward the uncaught exception to;
                 // rethrow the exception to make it visible.
                 throw new ResultImpl.UncaughtException(mError);
             }
+            Log.e("Chromium dispatch()", "mListeners is empty");
             return;
         }
 
         if (mDispatcher == null) {
+            Log.e("Chromium dispatch()", "AssertionError");
             throw new AssertionError("Shouldn't have listeners with null dispatcher");
         }
 
         for (int i = 0; i < mListeners.size(); ++i) {
+            Log.e("Chromium dispatch()", "For loop is called");
             final ResultImpl.Dispatcher dispatcher = mListeners.keyAt(i);
             final ArrayList<Runnable> jobs = mListeners.valueAt(i);
             dispatcher.dispatch(
@@ -203,6 +210,7 @@ public class ResultImpl<T> implements WResult<T> {
                         }
                     });
         }
+        Log.e("Chromium dispatch()", "mListeners.clear() is called");
         mListeners.clear();
     }
 

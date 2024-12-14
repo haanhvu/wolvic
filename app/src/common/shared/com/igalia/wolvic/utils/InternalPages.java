@@ -2,6 +2,7 @@ package com.igalia.wolvic.utils;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -130,11 +131,18 @@ public class InternalPages {
                 showSSLAdvanced = false;
         }
 
-        ErrorType errorType = fromSessionErrorToErrorType(sessionError);
+        /*ErrorType errorType = fromSessionErrorToErrorType(sessionError);
         html = html
                 .replace("%button%", context.getString(errorType.getRefreshButtonRes()))
                 .replace("%messageShort%", context.getString(errorType.getTitleRes()))
                 .replace("%messageLong%", context.getString(errorType.getMessageRes(), uri))
+                .replace("<ul>", "<ul role=\"presentation\">")
+                .replace("%css%", css)
+                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");*/
+        html = html
+                .replace("%button%", "something")
+                .replace("%messageShort%", "something")
+                .replace("%messageLong%", "something")
                 .replace("<ul>", "<ul role=\"presentation\">")
                 .replace("%css%", css)
                 .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");
@@ -143,8 +151,14 @@ public class InternalPages {
             html = html.replace("%url%", uri);
         }
 
+        Log.e("ChromiumErrorPage", "createErrorPageDataURI() returns " + html);
+
+        htmlBytes = html.getBytes();
+
         return "data:text/html;base64," + Base64.encodeToString(html.getBytes(), Base64.NO_WRAP);
     }
+
+    public static byte[] htmlBytes;
 
     public static byte[] createAboutPage(Context context,
                                          PageResources resources) {

@@ -1237,10 +1237,15 @@ public class Session implements WContentBlocking.Delegate, WSession.NavigationDe
         return WResult.fromValue(session.getWSession());
     }
 
+    public String errorData;
+
     @Override
     public WResult<String> onLoadError(@NonNull WSession session, @Nullable String uri, @NonNull WWebRequestError error) {
+        Log.e("ChromiumErrorPage", "onLoadError() returns WResult.fromValue(InternalPages.createErrorPageDataURI(mContext, uri, error.code()))");
         Log.d(LOGTAG, "Session onLoadError: " + uri);
 
+        Log.e("ChromiumErrorPage", "errorUriString: " + InternalPages.createErrorPageDataURI(mContext, uri, error.code()));
+        errorData = InternalPages.createErrorPageDataURI(mContext, uri, error.code());
         return WResult.fromValue(InternalPages.createErrorPageDataURI(mContext, uri, error.code()));
     }
 
