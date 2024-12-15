@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 
 import mozilla.components.browser.errorpages.ErrorType;
 
+import org.chromium.net.NetError;
+
 public class InternalPages {
 
     private static ErrorType fromSessionErrorToErrorType(int error) {
@@ -145,13 +147,6 @@ public class InternalPages {
                 .replace("<ul>", "<ul role=\"presentation\">")
                 .replace("%css%", css)
                 .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");
-        /*html = html
-                .replace("%button%", "something")
-                .replace("%messageShort%", "something")
-                .replace("%messageLong%", "something")
-                .replace("<ul>", "<ul role=\"presentation\">")
-                .replace("%css%", css)
-                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");*/
 
         if (uri != null) {
             html = html.replace("%url%", uri);
