@@ -137,21 +137,21 @@ public class InternalPages {
                 showSSLAdvanced = false;
         }
 
-        /*ErrorType errorType = fromSessionErrorToErrorType(sessionError);
+        ErrorType errorType = fromSessionErrorToErrorType(sessionError);
         html = html
                 .replace("%button%", context.getString(errorType.getRefreshButtonRes()))
                 .replace("%messageShort%", context.getString(errorType.getTitleRes()))
                 .replace("%messageLong%", context.getString(errorType.getMessageRes(), uri))
                 .replace("<ul>", "<ul role=\"presentation\">")
                 .replace("%css%", css)
-                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");*/
-        html = html
+                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");
+        /*html = html
                 .replace("%button%", "something")
                 .replace("%messageShort%", "something")
                 .replace("%messageLong%", "something")
                 .replace("<ul>", "<ul role=\"presentation\">")
                 .replace("%css%", css)
-                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");
+                .replace("%advancedSSLStyle%", showSSLAdvanced ? "block" : "none");*/
 
         if (uri != null) {
             html = html.replace("%url%", uri);
