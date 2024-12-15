@@ -118,6 +118,13 @@ public class InternalPages {
     public static String createErrorPageDataURI(Context context,
                                                 @Nullable String uri,
                                                 int sessionError) {
+
+        return "data:text/html;base64," + Base64.encodeToString(createErrorPageData(context, uri, sessionError), Base64.NO_WRAP);
+    }
+
+    public static byte[] createErrorPageData(Context context,
+                                             @Nullable String uri,
+                                             int sessionError) {
         String html = readRawResourceString(context, R.raw.error_pages);
         String css = readRawResourceString(context, R.raw.error_style);
 
@@ -153,9 +160,7 @@ public class InternalPages {
 
         Log.e("ChromiumErrorPage", "createErrorPageDataURI() returns " + html);
 
-        htmlBytes = html.getBytes();
-
-        return "data:text/html;base64," + Base64.encodeToString(html.getBytes(), Base64.NO_WRAP);
+        return html.getBytes();
     }
 
     public static byte[] htmlBytes;

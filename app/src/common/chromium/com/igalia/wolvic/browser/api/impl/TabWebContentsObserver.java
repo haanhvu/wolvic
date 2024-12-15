@@ -125,7 +125,7 @@ public class TabWebContentsObserver extends WebContentsObserver {
         if (navigationDelegate != null) {
             Log.e("ChromiumErrorPage", "navigationDelegate != null => onLoadError() is called");
 
-            WResult<String> errorUriResult = navigationDelegate.onLoadError(mSession, failingUrl.getSpec(), new WWebRequestError() {
+            byte[] errorData = navigationDelegate.onLoadErrorData(mSession, failingUrl.getSpec(), new WWebRequestError() {
                 @Override
                 public int code() {
                     return errorCode;
@@ -145,10 +145,7 @@ public class TabWebContentsObserver extends WebContentsObserver {
                 }
             });
 
-            Log.e("ChromiumErrorPage", "errorUriResult: " + errorUriResult.toString());
-            //mSession.loadUri(errorUriResult.toString());
-            Log.e("ChromiumErrorPage", "InternalPages.htmlBytes: " + InternalPages.htmlBytes);
-            mSession.loadData(InternalPages.htmlBytes, "text/html");
+            mSession.loadData(errorData, "text/html");
         }
     }
 

@@ -518,6 +518,15 @@ public interface WSession {
             Log.e("ChromiumErrorPage", "onLoadError() returns null");
             return null;
         }
+
+        @UiThread
+        default @Nullable
+        byte[] onLoadErrorData(
+                @NonNull final WSession session,
+                @Nullable final String uri,
+                @NonNull final WWebRequestError error) {
+            return null;
+        }
     }
 
     @Retention(RetentionPolicy.SOURCE)
