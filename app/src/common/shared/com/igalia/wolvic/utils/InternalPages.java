@@ -2,7 +2,6 @@ package com.igalia.wolvic.utils;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -158,12 +157,8 @@ public class InternalPages {
             html = html.replace("%url%", uri);
         }
 
-        Log.e("ChromiumErrorPage", "createErrorPageDataURI() returns " + html);
-
         return html.getBytes();
     }
-
-    public static byte[] htmlBytes;
 
     public static byte[] createAboutPage(Context context,
                                          PageResources resources) {

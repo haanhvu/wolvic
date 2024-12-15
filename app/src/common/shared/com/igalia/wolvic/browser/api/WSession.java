@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.PointerIcon;
 import android.view.Surface;
 import android.view.inputmethod.CursorAnchorInfo;
@@ -515,7 +514,6 @@ public interface WSession {
                 @NonNull final WSession session,
                 @Nullable final String uri,
                 @NonNull final WWebRequestError error) {
-            Log.e("ChromiumErrorPage", "onLoadError() returns null");
             return null;
         }
 
