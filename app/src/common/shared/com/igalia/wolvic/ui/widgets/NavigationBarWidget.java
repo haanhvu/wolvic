@@ -245,10 +245,23 @@ public class NavigationBarWidget extends UIWidget implements WSession.Navigation
         mBinding.navigationBarNavigation.backButton.setOnClickListener(v -> {
             v.requestFocusFromTouch();
 
-            if (getSession().canGoBack()) {
-                getSession().goBack();
-            } else if (mViewModel.getBackToNewTabEnabled().getValue().get()) {
+            if (mViewModel.getBackToNewTabEnabled().getValue().get()) {
                 getSession().loadUri(UrlUtils.ABOUT_NEWTAB);
+            } else if (mViewModel.getCanGoBackFromNewTab().getValue().get()) {
+                String url = mViewModel.getUrlBackFromNewTab().getValue().toString();
+                getSession().loadUri(url);
+
+                mAttachedWindow.hideNewTab();
+
+                mViewModel.setCanGoBackFromNewTab(false);
+                mViewModel.enableForwardToNewTab(true);
+            } else if (getSession().canGoBack()) {
+                getSession().goBack();
+                if (mViewModel.getIsNewTabHomePageClicked().getValue().get()) {
+                    mAttachedWindow.hideNewTab(true);
+                    mViewModel.enableForwardToNewTab(true);
+                    mViewModel.setIsNewTabHomePageClicked(false);
+                }
             }
 
             if (mAudio != null) {
@@ -259,7 +272,11 @@ public class NavigationBarWidget extends UIWidget implements WSession.Navigation
 
         mBinding.navigationBarNavigation.forwardButton.setOnClickListener(v -> {
             v.requestFocusFromTouch();
-            if (mViewModel.getCanGoForwardFromNewTab().getValue().get()) {
+            if (mViewModel.getForwardToNewTabEnabled().getValue().get()) {
+                getSession().loadUri(UrlUtils.ABOUT_NEWTAB);
+                mViewModel.enableForwardToNewTab(false);
+                mViewModel.setCanGoBackFromNewTab(true);
+            } else if (mViewModel.getCanGoForwardFromNewTab().getValue().get()) {
                 String forwardUrl = mViewModel.getUrlForwardFromNewTab().getValue().toString();
                 getSession().loadUri(forwardUrl);
 
@@ -271,6 +288,7 @@ public class NavigationBarWidget extends UIWidget implements WSession.Navigation
             } else {
                 getSession().goForward();
             }
+
             if (mAudio != null) {
                 mAudio.playSound(AudioEngine.Sound.CLICK);
             }
@@ -306,6 +324,13 @@ public class NavigationBarWidget extends UIWidget implements WSession.Navigation
         });
 
         mBinding.navigationBarNavigation.homeButton.setOnClickListener(v -> {
+            if (SettingsStore.getInstance(getContext()).getHomepage().equals(UrlUtils.ABOUT_NEWTAB)) {
+                mViewModel.setIsNewTabHomePageClicked(true);
+                mViewModel.setCanGoBackFromNewTab(true);
+                mViewModel.setCanGoForwardFromNewTab(false);
+                mViewModel.setCanGoForward(false);
+            }
+
             v.requestFocusFromTouch();
             getSession().loadUri(getSession().getHomeUri());
             if (mAudio != null) {
@@ -1038,8 +1063,7 @@ public class NavigationBarWidget extends UIWidget implements WSession.Navigation
         }
 
         mBinding.navigationBarNavigation.reloadButton.setEnabled(
-                mViewModel.getCurrentContentType().getValue() != Windows.ContentType.NEW_TAB
-                        && !mViewModel.getIsNativeContentVisible().getValue().get()
+                !mViewModel.getIsNativeContentVisible().getValue().get()
                         && !UrlUtils.isPrivateAboutPage(getContext(), url));
     }
 

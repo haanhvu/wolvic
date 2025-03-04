@@ -515,7 +515,7 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         return mLibrary.getSelectedPanelType();
     }
 
-    private void hideLibraryPanel() {
+    public void hideLibraryPanel() {
         if (getCurrentContentType().isLibraryContent()) {
             hidePanel(true);
         }
@@ -615,7 +615,7 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         }
     }
 
-    private void hideNewTab(boolean switchSurface) {
+    public void hideNewTab(boolean switchSurface) {
         if (mView != null && mNewTab != null) {
             unsetView(mNewTab, switchSurface);
         }
